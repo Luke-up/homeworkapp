@@ -11,3 +11,5 @@ venv/
 # Docker-related
 Dockerfile
 docker-compose.yml
+
+frontend/node_modules/
