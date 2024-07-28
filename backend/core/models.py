@@ -85,11 +85,20 @@ class Homework(models.Model):
     words = models.ManyToManyField('Word', related_name='homework_related', blank=True)
     reading = models.TextField(blank=True)
     summary = models.TextField(blank=True)
-    image = models.TextField(blank=True)
     questions = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+class StudentHomework(models.Model):
+    homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homework_assignments')
+    completed = models.BooleanField(default=False)
+    submission_date = models.DateTimeField(null=True, blank=True)
+    answers = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.homework.title} - {self.student.user.email}"
 
 
 class Word(models.Model):
