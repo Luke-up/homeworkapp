@@ -1,25 +1,12 @@
-# urls.py
 from django.urls import path
-from .views import CreateSchoolView, LoginView, CreateTeacherView, CreateStudentView, CreateClassView, ListClassesView, CreateHomeworkView, StudentHomeworkView, UpdateStudentHomeworkView
+
+from .views.school_views import ListClassesView, StudentHomeworkView, UpdateStudentHomeworkView, CreateTeacherView, CreateStudentView, CreateClassView, CreateHomeworkView
+from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView
 
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
-
-    path('create-school/', CreateSchoolView.as_view(), name='create-school'),
-
-    # Accessible only by school users
-    path('create-teacher/', CreateTeacherView.as_view(), name='create_teacher'),
-    path('create-student/', CreateStudentView.as_view(), name='create_student'),
-
-    path('create-class/', CreateClassView.as_view(), name='create_class'),
-    path('classes/', ListClassesView.as_view(), name='list-classes'),
-
-    # Accessible only by teachers and school users
-    path('homework/create/', CreateHomeworkView.as_view(), name='create-homework'),
 
     path('homework/', CreateHomeworkView.as_view(), name='create-homework'),
     path('student-homework/', StudentHomeworkView.as_view(), name='student-homework'),
-
     path('student-homework/<int:pk>/', UpdateStudentHomeworkView.as_view(), name='update-student-homework'),
 
     # Endpoints by page
@@ -29,12 +16,13 @@ urlpatterns = [
 
         # Signup Page
             # create-school endpoint            (anyone)                        Done
-
+    path('create-school/', CreateSchoolView.as_view(), name='create-school'), 
         # Login Page
             # login endpoint                    (registered users)              Done
-
+    path('login/', LoginView.as_view(), name='login'),
         # Student Dashboard
             # Update profile endpoint           (students)
+
             # Get student dashboard endpoint    (students)
 
         # Student Lexicon
@@ -59,13 +47,16 @@ urlpatterns = [
 
         # Classroom Homework view create
             # Create homework endpoint          (teachers and school users)         Done
+    path('homework/create/', CreateHomeworkView.as_view(), name='create-homework'),
 
         # Classroom Homework view mark
             # Update student homework endpoint  (teachers and school users)
 
         # School Classrooms
             # Create class endpoint             (school users)                      Done
+    path('create-class/', CreateClassView.as_view(), name='create_class'),
             # Get classes endpoint              (school users)                      Done
+    path('classes/', ListClassesView.as_view(), name='list-classes'),
             # Update class endpoint             (school users)
             # Update Teacher endpoint           (school users)
             # Update Student endpoint           (school users)
@@ -74,6 +65,7 @@ urlpatterns = [
         # Student Search
             # Get students endpoint             (school users)
             # Create student endpoint           (school users)                      Done
+    path('create-student/', CreateStudentView.as_view(), name='create_student'),
 
         # Student view
             # Get student profile endpoint      (school users)
@@ -83,6 +75,7 @@ urlpatterns = [
         # Teacher Search
             # Get teachers endpoint             (school users)
             # Create teacher endpoint           (school users)                      Done
+    path('create-teacher/', CreateTeacherView.as_view(), name='create_teacher'),
             # Update teacher endpoint           (school users)
             # Delete teacher endpoint           (school users)
 
