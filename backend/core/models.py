@@ -24,7 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('school', 'School'),
         ('teacher', 'Teacher'),
         ('student', 'Student'),
-        ('admin', 'Admin'),  # Adding 'admin' type
+        ('admin', 'Admin'),
     ]
     email = models.EmailField(unique=True)
     is_staff = models.BooleanField(default=False)
@@ -53,6 +53,17 @@ class School(models.Model):
     def __str__(self):
         return self.name
 
+class Class(models.Model):
+    name = models.CharField(max_length=255)
+    school = models.ForeignKey(School, related_name='classes', on_delete=models.CASCADE)
+    description = models.TextField(blank=True)
+    level = models.IntegerField()
+    teachers = models.ManyToManyField('Teacher', related_name='classes_teaching', blank=True)
+    students = models.ManyToManyField('Student', related_name='classes_enrolled', blank=True)
+
+    def __str__(self):
+        return self.name
+
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher_profile')
     school = models.ForeignKey(School, related_name='teachers', on_delete=models.CASCADE)
@@ -65,18 +76,10 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     school = models.ForeignKey(School, related_name='students', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    homework_assignments = models.ManyToManyField('Homework', through='StudentHomework', related_name='students', blank=True)
 
     def __str__(self):
         return f"Student Profile: {self.user.email}"
-
-class Class(models.Model):
-    name = models.CharField(max_length=255)
-    school = models.ForeignKey(School, related_name='classes', on_delete=models.CASCADE)
-    description = models.TextField(blank=True)
-    level = models.IntegerField()
-
-    def __str__(self):
-        return self.name
 
 class Homework(models.Model):
     title = models.CharField(max_length=255)
@@ -86,20 +89,23 @@ class Homework(models.Model):
     reading = models.TextField(blank=True)
     summary = models.TextField(blank=True)
     questions = models.JSONField(blank=True, null=True)
+    teacher_comment = models.TextField(blank=True)  # Added field for teacher's comments
+    mark_value = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # Added field for marks, with precision for grades
+    due_date = models.DateTimeField(null=True, blank=True)  # Added field for due date
 
     def __str__(self):
         return self.title
 
 class StudentHomework(models.Model):
-    homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homework_assignments')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homework_details')
+    homework = models.ForeignKey(Homework, on_delete=models.CASCADE, related_name='student_details')
     completed = models.BooleanField(default=False)
+    marked = models.BooleanField(default=False)  # Added for marking status
     submission_date = models.DateTimeField(null=True, blank=True)
     answers = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.homework.title} - {self.student.user.email}"
-
 
 class Word(models.Model):
     word = models.CharField(max_length=255)
