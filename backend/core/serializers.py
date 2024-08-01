@@ -29,7 +29,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
-        fields = ['user', 'name', 'school']
+        fields = ['id','user', 'name', 'school']
 
     def create(self, validated_data):
         teacher = Teacher.objects.create(**validated_data)
@@ -38,7 +38,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['user', 'school', 'name']
+        fields = ['id', 'user', 'school', 'name', 'homework_assignments']
 
     def create(self, validated_data):
         student = Student.objects.create(**validated_data)
@@ -47,7 +47,16 @@ class StudentSerializer(serializers.ModelSerializer):
 class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
-        fields = ['id', 'name', 'school', 'description', 'level']
+        fields = ['id', 'name', 'school', 'description', 'level', 'teachers', 'students']
+
+class SchoolDetailSerializer(serializers.ModelSerializer):
+    classes = ClassSerializer(many=True, read_only=True)
+    teachers = TeacherSerializer(many=True, read_only=True)
+    students = StudentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = School
+        fields = ['id', 'name', 'classes', 'teachers', 'students']
 
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
