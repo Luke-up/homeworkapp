@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from core.models import User, Class, Homework, Word
-from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, ClassSerializer, HomeworkSerializer, WordSerializer
+from core.models import User, Class, Homework, Word, Teacher, Student
+from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
 
 
 class CreateTeacherView(APIView):
@@ -112,6 +112,26 @@ class CreateClassView(APIView):
             return Response({'message': 'Class created successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ListClassesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Ensure that only schools can list classes
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Retrieve the school associated with the authenticated user
+        school = request.user.school_profile
+        
+        # Get all classes related to the school
+        classes = Class.objects.filter(school=school)
+        teachers = Teacher.objects.filter(school=school)
+        students = Student.objects.filter(school=school)
+
+        serializer = SchoolDetailSerializer(school)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class CreateHomeworkView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -136,22 +156,53 @@ class CreateHomeworkView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ListClassesView(APIView):
+class AssignToClassView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        # Ensure that only schools can list classes
+    def patch(self, request):
         if request.user.user_type != 'school':
             return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
-        
-        # Retrieve the school associated with the authenticated user
+
+        data = request.data
+        class_id = data.get('class_id')
+        teacher_id = data.get('teacher_id')
+        student_id = data.get('student_id')
+
+        if not class_id:
+            return Response({'error': 'Class ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
         school = request.user.school_profile
+
+        if teacher_id:
+            return self.assign_teacher_to_class(school, class_id, teacher_id)
         
-        # Get all classes related to the school
-        classes = Class.objects.filter(school=school)
-        serializer = ClassSerializer(classes, many=True)
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if student_id:
+            return self.assign_student_to_class(school, class_id, student_id)
+
+        return Response({'error': 'Either teacher_id or student_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def assign_teacher_to_class(self, school, class_id, teacher_id):
+        try:
+            teacher = school.teachers.get(id=teacher_id)
+            class_obj = school.classes.get(id=class_id)
+            class_obj.teachers.add(teacher)
+            return Response({'message': 'Teacher assigned to class successfully'}, status=status.HTTP_200_OK)
+        except Teacher.DoesNotExist:
+            return Response({'error': 'Teacher not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def assign_student_to_class(self, school, class_id, student_id):
+        try:
+            student = school.students.get(id=student_id)
+            class_obj = school.classes.get(id=class_id)
+            class_obj.students.add(student)
+            return Response({'message': 'Student assigned to class successfully'}, status=status.HTTP_200_OK)
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class StudentHomeworkView(APIView):
     permission_classes = [IsAuthenticated]
