@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views.school_views import ListClassesView, StudentHomeworkView, UpdateStudentHomeworkView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView
 from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView
+from .views.student_views import StudentDashboardView
 
 urlpatterns = [
 
@@ -24,7 +25,7 @@ urlpatterns = [
             # Update profile endpoint                   (students)
 
             # Get student dashboard endpoint            (students)
-
+    path('student-dashboard/', StudentDashboardView.as_view(), name='student-dashboard'),
         # Student Lexicon
             # Get student lexicon endpoint              (students)
 
