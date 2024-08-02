@@ -76,7 +76,8 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     school = models.ForeignKey(School, related_name='students', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    homework_assignments = models.ManyToManyField('Homework', through='StudentHomework', related_name='students', blank=True)
+    effort_symbol = models.IntegerField(default=0)
+    homework_assignments = models.ManyToManyField('StudentHomework', related_name='students')
 
     def __str__(self):
         return f"Student Profile: {self.user.email}"
@@ -89,9 +90,7 @@ class Homework(models.Model):
     reading = models.TextField(blank=True)
     summary = models.TextField(blank=True)
     questions = models.JSONField(blank=True, null=True)
-    teacher_comment = models.TextField(blank=True)  # Added field for teacher's comments
-    mark_value = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)  # Added field for marks, with precision for grades
-    due_date = models.DateTimeField(null=True, blank=True)  # Added field for due date
+    due_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -99,9 +98,11 @@ class Homework(models.Model):
 class StudentHomework(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homework_details')
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE, related_name='student_details')
-    completed = models.BooleanField(default=False)
-    marked = models.BooleanField(default=False)  # Added for marking status
+    submitted = models.BooleanField(default=False)
+    marked = models.BooleanField(default=False)
+    mark_value = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     submission_date = models.DateTimeField(null=True, blank=True)
+    teacher_comment = models.TextField(blank=True)
     answers = models.JSONField(blank=True, null=True)
 
     def __str__(self):

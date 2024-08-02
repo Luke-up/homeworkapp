@@ -203,7 +203,7 @@ class AssignToClassView(APIView):
         except Class.DoesNotExist:
             return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
+# Not opperational yet
 class StudentHomeworkView(APIView):
     permission_classes = [IsAuthenticated]
 

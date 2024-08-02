@@ -66,26 +66,27 @@ class WordSerializer(serializers.ModelSerializer):
 class StudentHomeworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentHomework
-        fields = ['homework', 'student', 'completed', 'submission_date', 'answers']
+        fields = ['homework', 'student', 'submitted', 'submission_date', 'answers', 'teacher_comment', 'mark_value', 'marked']
 
 class HomeworkSerializer(serializers.ModelSerializer):
-    words = WordSerializer(many=True)  # Nested WordSerializer for creating words
+    words = WordSerializer(many=True)
 
     class Meta:
         model = Homework
-        fields = ['title', 'level', 'class_field', 'words', 'reading', 'summary', 'questions']
+        fields = ['title', 'level', 'class_field', 'words', 'reading', 'summary', 'questions', 'due_date']
 
     def create(self, validated_data):
         words_data = validated_data.pop('words', [])
         homework = Homework.objects.create(**validated_data)
         
-        # Create StudentHomework instances for each student in the class
-        class_id = validated_data.get('class_field')
-        students = Student.objects.filter(school__classes__id=class_id)
-        for student in students:
-            StudentHomework.objects.create(homework=homework, student=student)
+        class_field = validated_data.get('class_field')
+        if class_field:
+
+            students = class_field.students.all()
+
+            for student in students:
+                StudentHomework.objects.create(homework=homework, student=student)
         
-        # Create Word instances
         for word_data in words_data:
             Word.objects.create(homework=homework, **word_data)
         
