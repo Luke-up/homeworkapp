@@ -77,7 +77,7 @@ class Student(models.Model):
     school = models.ForeignKey(School, related_name='students', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     effort_symbol = models.IntegerField(default=0)
-    homework_assignments = models.ManyToManyField('StudentHomework', related_name='students')
+    words = models.ManyToManyField('Word', related_name='students', blank=True)
 
     def __str__(self):
         return f"Student Profile: {self.user.email}"
@@ -111,7 +111,6 @@ class StudentHomework(models.Model):
 class Word(models.Model):
     word = models.CharField(max_length=255)
     example_sentence = models.TextField()
-    homework = models.ForeignKey('Homework', related_name='homework_words', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.word
