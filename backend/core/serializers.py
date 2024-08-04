@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, School, Teacher, Student, Class, Homework, Word, StudentHomework
+from core.models import User, School, Teacher, Student, Class, Homework, Word, StudentHomework
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -70,7 +70,7 @@ class StudentHomeworkSerializer(serializers.ModelSerializer):
     homework = HomeworkSerializer()
     class Meta:
         model = StudentHomework
-        fields = ['homework', 'student', 'submitted', 'submission_date', 'answers', 'teacher_comment', 'mark_value', 'marked']
+        fields = ['id', 'homework', 'student', 'submitted', 'submission_date', 'answers', 'teacher_comment', 'mark_value', 'marked']
 
 class StudentSerializer(serializers.ModelSerializer):
 
@@ -107,3 +107,33 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     def get_homework_assignments(self, obj):
         student_homework_assignments = StudentHomework.objects.filter(student=obj, marked=False, submitted=False)
         return StudentHomeworkSerializer(student_homework_assignments, many=True).data
+
+class TeacherDetailSerializer(serializers.ModelSerializer):
+    classes = serializers.SerializerMethodField()
+    students = serializers.SerializerMethodField()
+    homework = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Teacher
+        fields = ['id', 'user', 'school', 'name', 'classes', 'students', 'homework']
+
+    def get_data(self, obj):
+        classes_teaching = obj.classes_teaching.all()
+
+        students = Student.objects.filter(classes_enrolled__in=classes_teaching)
+
+        student_homework = StudentHomework.objects.filter(
+            student__in=students,
+            submitted=True,
+            marked=False
+        ).select_related('homework')
+
+        return {
+            'classes': ClassSerializer(classes_teaching, many=True).data,
+            'students': StudentSerializer(students, many=True).data,
+            'homework': StudentHomeworkSerializer(student_homework, many=True).data
+        }
+
+    def to_representation(self, instance):
+        data = self.get_data(instance)
+        return data

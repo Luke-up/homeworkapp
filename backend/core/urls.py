@@ -1,14 +1,11 @@
 from django.urls import path
 
-from .views.school_views import ListClassesView, StudentHomeworkView, UpdateStudentHomeworkView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView
+from .views.school_views import ListClassesView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView
 from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView
-from .views.student_views import StudentDashboardView
+from .views.student_views import StudentDashboardView, StudentLexiconView, StudentHomeworkView, StudentHomeworkUpdateView
+from .views.teacher_views import TeacherDashboardView
 
 urlpatterns = [
-
-    path('homework/', CreateHomeworkView.as_view(), name='create-homework'),
-    path('student-homework/', StudentHomeworkView.as_view(), name='student-homework'),
-    path('student-homework/<int:pk>/', UpdateStudentHomeworkView.as_view(), name='update-student-homework'),
 
     # Endpoints by page
 
@@ -31,6 +28,9 @@ urlpatterns = [
 
         # Student Homework
             # Get student homework endpoint             (students)
+    path('student-homework/', StudentHomeworkView.as_view(), name='student-homework'),
+            # Update student homework endpoint          (students)
+    path('student-homework/update/', StudentHomeworkUpdateView.as_view(), name='update-student-homework'),
 
         # Student Homework view
             # Update student homework endpoint          (students)
@@ -38,6 +38,7 @@ urlpatterns = [
         # Teacher Dashboard
             # Update profile endpoint                   (teachers)
             # Get teacher dashboard endpoint            (teachers)
+    path('teacher-dashboard/', TeacherDashboardView.as_view(), name='teacher-dashboard'),
 
         # Classroom Homework
             # Get homework endpoint                     (teachers and school users)
