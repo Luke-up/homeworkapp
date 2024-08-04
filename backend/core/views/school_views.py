@@ -202,35 +202,3 @@ class AssignToClassView(APIView):
             return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
         except Class.DoesNotExist:
             return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
-
-# Not opperational yet
-class StudentHomeworkView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        student = request.user.student_profile
-        assignments = StudentHomework.objects.filter(student=student)
-        serializer = StudentHomeworkSerializer(assignments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-        serializer = StudentHomeworkSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Student homework assignment created successfully'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class UpdateStudentHomeworkView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def patch(self, request, pk):
-        try:
-            student_homework = StudentHomework.objects.get(id=pk, student=request.user.student_profile)
-        except StudentHomework.DoesNotExist:
-            return Response({'error': 'Student homework assignment not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = StudentHomeworkSerializer(student_homework, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Student homework assignment updated successfully'}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
