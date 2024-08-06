@@ -9,6 +9,18 @@ from core.models import User, Class, Homework, Word
 from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, ClassSerializer, HomeworkSerializer, WordSerializer
 
 
+class AuthStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_type = getattr(user, 'user_type', 'unknown') 
+
+        return Response({
+            'isAuthenticated': True,
+            'userType': user_type,
+        })
+
 class RegisterUserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)

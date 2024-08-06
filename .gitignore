@@ -7,9 +7,22 @@ __pycache__/
 # Environment-related
 venv/
 .env
+frontend/.env.local
 
 # Docker-related
 Dockerfile
 docker-compose.yml
 
+# Node.js-related
 frontend/node_modules/
+
+# Next.js-related
+frontend/.next/types/
+
+# Next.js cache and build artifacts
+frontend/.next/cache/
+frontend/.next/server/
+frontend/.next/static/
+
+# Django migrations
+backend/core/migrations/
