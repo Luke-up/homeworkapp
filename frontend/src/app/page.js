@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import '../../styles/global.scss';
 
 const HomePage = () => {
   const router = useRouter();
@@ -31,12 +32,31 @@ const HomePage = () => {
         console.error('Error checking authentication status:', error);
         router.push('/signup');
       });
-    } else {
-      router.push('/signup');
-    }
+    } 
   }, [router]);
 
-  return <div>Redirecting...</div>;
+  return (
+    <>
+  <div className="homefold">
+    <div className="homewelcome">
+
+      <h1>Granadilla</h1>
+  
+      <p>Granadilla is a platform for teachers to create and share educational content with their students.</p>
+
+      <a href="/signup" className="button">Sign Up</a>
+
+      <p className="italics">Granadilla is a proof of concept and is not yet ready for production use.</p>
+
+    </div>
+  </div>
+  <div className="homefooter">
+    <div className="footer">
+      <p>Granadilla is a project by Luke Paine.</p>
+      </div>
+  </div>
+  </>
+)
 };
 
 export default HomePage;

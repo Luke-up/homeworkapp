@@ -1,0 +1,56 @@
+$PrimaryColor: #36006C;
+$SecondaryColor: #8F8100;
+$DarkColor: #282828;
+$LightColor: #D9D9D9;
+$TextColor: #AAAAAA;
+body {
+    background: #ffffff;
+}
+.homefold {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .homewelcome {
+        position: relative;
+        background-color: $DarkColor;
+        color: #ffffff;
+        max-width: 800px;
+        padding: 60px 110px;
+        width: calc(100% - 60px);
+        margin: 0 auto;
+        border-radius: 4px;
+        h1 {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        p {
+            &.italics {
+                font-style: italic;
+                color: $TextColor;
+                margin-top: 32px;
+                font-size: 12px;
+                text-align: center;
+            }
+        }
+        .button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+            margin-top: 32px;
+            padding: 24px;
+            background-color: $LightColor;
+            color: $DarkColor;
+            text-align: center;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            &:hover {
+                background-color: $SecondaryColor;
+            }
+        }
+    }
+}
