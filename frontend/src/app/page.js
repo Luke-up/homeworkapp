@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import '../../styles/global.scss';
+import '../../styles/homepage.scss';
 
 const HomePage = () => {
   const router = useRouter();
