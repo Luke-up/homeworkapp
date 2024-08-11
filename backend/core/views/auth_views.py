@@ -70,3 +70,21 @@ class CreateSchoolView(APIView):
             return Response(school_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RefreshTokenView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        refresh = request.data.get('refresh_token')
+        if not refresh:
+            return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            token = RefreshToken(refresh)
+            new_access_token = str(token.access_token)
+            new_refresh_token = str(token)
+            return Response({
+                'access': new_access_token,
+                'refresh': new_refresh_token
+            }, status=status.HTTP_200_OK)
+        except TokenError as e:
+            return Response({'error': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+

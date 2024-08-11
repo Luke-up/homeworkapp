@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 import './styles.scss';
 
 const SignupPage = () => {
@@ -59,13 +61,10 @@ const SignupPage = () => {
       <h1>Signup</h1>
       {error && <p>{error}</p>}
       <form onSubmit={handleSignup}>
-        <label>Email</label>
-        <input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <label>Password</label>
-        <input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <label>School Name</label>
-        <input label="School Name" type="text" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} required />
-        <button radius="none" type="submit">Sign Up</button>
+        <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required/>
+        <Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required/>
+        <Input label="School Name" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} type="text" required/>
+        <Button type="submit">Sign Up</Button>
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>
     </div>

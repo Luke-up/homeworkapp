@@ -1,0 +1,24 @@
+@import '../../styles/global.scss';
+
+.input {
+    input {
+        width: calc(100% - 24px);
+        padding: 12px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        border: 1px solid $LightColor;
+        border-radius: 4px;
+    }
+    label {
+        color: #ffffff;
+        font-size: 12px;
+        transform: translate(5px, -4px);
+        position: absolute;
+        background-color: $DarkColor;
+        display: block;
+        border-radius: 15px;
+        width: fit-content; 
+        padding: 3px 5px;
+        border: 1px solid #ffffff;
+    }
+}

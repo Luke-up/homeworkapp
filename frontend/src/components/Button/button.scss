@@ -1,0 +1,16 @@
+@import '../../styles/global.scss';
+
+button {
+    background-color: $SecondaryColor;
+    margin: 0;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        background-color: lighten($SecondaryColor, 5%);
+        cursor: pointer;
+    }
+}

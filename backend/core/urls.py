@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views.school_views import ListClassesView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView
-from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView, AuthStatusView
+from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView, AuthStatusView, RefreshTokenView
 from .views.student_views import StudentDashboardView, StudentLexiconView, StudentHomeworkView, StudentHomeworkUpdateView
 from .views.teacher_views import TeacherDashboardView
 
@@ -10,6 +10,7 @@ urlpatterns = [
     # Endpoints by page
 
     path('auth-status/', AuthStatusView.as_view(), name='auth-status'),
+    path('refresh/', RefreshTokenView.as_view(), name='token_refresh'),
         # Homepage
             # No endpoints needed
 
