@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import './styles.scss';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -38,19 +41,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="login">
       <h1>Login</h1>
       {error && <p>{error}</p>}
       <form onSubmit={handleLogin}>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </label>
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </label>
-        <button type="submit">Login</button>
+      <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required/>
+      <Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required/>
+      <Button type="submit">Login</Button>
       </form>
       <p>Don't have an account? <a href="/signup">Sign up</a></p>
     </div>
