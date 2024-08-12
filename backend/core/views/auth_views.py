@@ -72,7 +72,7 @@ class CreateSchoolView(APIView):
 
 class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
-
+    print('Refresh')
     def post(self, request):
         refresh = request.data.get('refresh_token')
         if not refresh:
