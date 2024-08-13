@@ -2,67 +2,23 @@
 
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
+import axiosInterceptor from '@/utils/axiosInterceptor';
 
 const ClassesPage = () => {
-  const [classes, setClasses] = useState(["No classes found"]);
+  const [classes, setClasses] = useState([{"name":"No classes found", "id":0}]);
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/classes/`, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-          },
+        const res = await axiosInterceptor.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/classes/`, {
         });
-        if (res.status === 401) {
-          const refreshSuccess = await refreshToken();
-          if (refreshSuccess) {
-            const retryRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/classes/`, {
-              headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('access_token')}`,
-              },
-            });
-            const retryData = await retryRes.json();
-            if (retryData != '[]') {
-              setClasses(retryData.classes);
-            }
-          } else {
-            throw new Error('Unable to refresh token');
-          }
-        } else {
-          const data = await res.json();
-          if (data != '[]') {
-            console.log(data);
-            setClasses(data.classes);
-          }
+        const data = await res.data;
+        if (data != '[]') {
+          setClasses(data.classes);
+          console.log(res);
         }
       } catch (error) {
         console.log(error);
-      }
-    };
-    const refreshToken = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/refresh/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            refresh_token: sessionStorage.getItem('refresh_token'),
-          }),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          sessionStorage.setItem('access_token', data.access);
-          sessionStorage.setItem('refresh_token', data.refresh);
-          return true;
-        } else {
-          return false;
-        }
-      } catch (error) {
-        console.error('Error refreshing token:', error);
-        return false;
       }
     };
     fetchClasses();
@@ -71,11 +27,32 @@ const ClassesPage = () => {
   return (
     <div className="classes">
       <h1>Classes</h1>
-      <ul>
-        {classes.map((classItem) => (
-          <li key={classItem.id}>{classItem.name}</li>
+      {classes.map((classItem) => (
+          <div key={classItem.id}>
+            <div className="class-top">
+              <div className="class-name">
+              {classItem.name}
+              </div>
+              <div className='class-teachers'>
+                Teachers: 
+                {classItem.teachers ? classItem.teachers.map((teacher) => (
+                  <div key={teacher.id} className='teacher'>
+                    {teacher.name}
+                  </div>
+                )): null}
+                <span>X</span>
+              </div>
+            </div>
+            <div className="class-students">
+              <span>Students:</span><span>X</span>
+              {classItem.students ? classItem.students.map((student) => (
+                <div key={student.id} className='student'>
+                  {student.name}
+                </div>
+              )): null}
+            </div>
+          </div>
         ))}
-      </ul>
     </div>
   );
 };
