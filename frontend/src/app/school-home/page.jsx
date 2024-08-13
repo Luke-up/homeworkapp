@@ -12,10 +12,10 @@ const ClassesPage = () => {
       try {
         const res = await axiosInterceptor.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/classes/`, {
         });
-        const data = await res.json();
+        const data = await res.data;
         if (data != '[]') {
-          console.log(data);
           setClasses(data.classes);
+          console.log(res);
         }
       } catch (error) {
         console.log(error);
@@ -27,11 +27,32 @@ const ClassesPage = () => {
   return (
     <div className="classes">
       <h1>Classes</h1>
-      <ul>
-        {classes.map((classItem) => (
-          <li key={classItem.id}>{classItem.name}</li>
+      {classes.map((classItem) => (
+          <div key={classItem.id}>
+            <div className="class-top">
+              <div className="class-name">
+              {classItem.name}
+              </div>
+              <div className='class-teachers'>
+                Teachers: 
+                {classItem.teachers ? classItem.teachers.map((teacher) => (
+                  <div key={teacher.id} className='teacher'>
+                    {teacher.name}
+                  </div>
+                )): null}
+                <span>X</span>
+              </div>
+            </div>
+            <div className="class-students">
+              <span>Students:</span><span>X</span>
+              {classItem.students ? classItem.students.map((student) => (
+                <div key={student.id} className='student'>
+                  {student.name}
+                </div>
+              )): null}
+            </div>
+          </div>
         ))}
-      </ul>
     </div>
   );
 };

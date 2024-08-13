@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInterceptor = axios.create({
-    baseURL: 'http://localhost:3000/core/',
+    baseURL: process.env.NEXT_PUBLIC_FRONTEND_URL,
 });
 
 axiosInterceptor.interceptors.request.use(
@@ -24,7 +24,7 @@ axiosInterceptor.interceptors.response.use(
 
         if (error.response.status === 401 && refreshToken) {
             try {
-                const response = await axios.post('http://localhost:3000/core/refresh/', { refresh_token: refreshToken });
+                const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/refresh/`, { refresh_token: refreshToken });
                 const newAccessToken = response.data.access;
                 const newRefreshToken = response.data.refresh;
                 sessionStorage.setItem('access_token', newAccessToken);
