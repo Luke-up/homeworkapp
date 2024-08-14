@@ -1,28 +1,84 @@
 @import '../../styles/global.scss';
 
-.login {
-    width: 500px;
-    margin: 0 auto;
-    background-color: $DarkColor;
+.class-item {
+    width: 940px;
     padding: 30px;
-    h1 {
-        text-align: center;
-        color: #ffffff;
+    margin: 20px auto;
+    background-color: $LightColor;
+    .class-top {
+        display: flex;
+        gap: 30px;
+        .class-name {
+            min-width: 300px;
+            font-size: 30px;
+            color: $DarkColor;
+        }
+        .class-teachers {
+            font-size: 20px;
+            color: $DarkColor;
+            display: flex;
+            align-items: end;   
+            flex: 1;
+            .teacher {
+                background-color: #ffffff;
+                border-radius: 20px;
+                padding: 5px 10px;
+                margin: 0 5px;
+                position: relative;
+                font-size: 15px;
+                align-content: center;
+                .delete-teacher {
+                    background-color: #000000;
+                    color: #ffffff;
+                    position: absolute;
+                    top: -5px;
+                    right: 0px;
+                    height: 10px;
+                    width: 10px;
+                    font-size: 8px;
+                    padding: 3px;
+                    border-radius: 50%;
+                    text-align: center;
+                    cursor: pointer;
+                }
+            }
+            span {
+                margin-left: auto;
+                margin-right: 0;
+                background-color: #ffffff;
+                border-radius: 20px;
+                height: 40px;
+                width: 40px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                cursor: pointer;
+            }
+        }
     }
-    button {
-        float: right;
-    }
-    p {
-        color: #AAAAAA;
-        margin-top: 24px;
-        font-size: 14px;
-        a {
-            color: $SecondaryColor;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s ease-in-out;
-            &:hover {
-                color: lighten($SecondaryColor, 5%);
+    .students {
+        margin-top: 20px;
+        .student {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 5px 10px;
+            margin: 0 5px;
+            position: relative;
+            font-size: 15px;
+            align-content: center;
+            .delete-student {
+                background-color: #000000;
+                color: #ffffff;
+                position: absolute;
+                top: -5px;
+                right: 0px;
+                height: 10px;
+                width: 10px;
+                font-size: 8px;
+                padding: 3px;
+                border-radius: 50%;
+                text-align: center;
+                cursor: pointer;
             }
         }
     }
