@@ -64,7 +64,7 @@ const SignupPage = () => {
         <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required/>
         <Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required/>
         <Input label="School Name" value={schoolName} onChange={(e) => setSchoolName(e.target.value)} type="text" required/>
-        <Button type="submit">Sign Up</Button>
+        <Button type="submit" text="Sign Up"></Button>
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>
     </div>

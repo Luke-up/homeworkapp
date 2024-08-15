@@ -1,10 +1,10 @@
 import React from 'react';
 import './button.scss';
 
-const Input = ({ type }) => {
+const Button = ({ type, text }) => {
     return (
-        <button type={type}>Sign Up</button>
+        <button type={type}>{text}</button>
     );
   };
   
-  export default Input;
+  export default Button;

@@ -47,7 +47,7 @@ const LoginPage = () => {
       <form onSubmit={handleLogin}>
       <Input label="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required/>
       <Input label="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required/>
-      <Button type="submit">Login</Button>
+      <Button type="submit" text="Login"></Button>
       </form>
       <p>Don't have an account? <a href="/signup">Sign up</a></p>
     </div>

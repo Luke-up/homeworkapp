@@ -55,6 +55,12 @@
                 cursor: pointer;
             }
         }
+        &.new-class {
+            align-items: center;
+            .input {
+                flex: 1;
+            }
+        }
     }
     .students {
         margin-top: 20px;
