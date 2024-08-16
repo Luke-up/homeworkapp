@@ -8,9 +8,11 @@
     .class-top {
         display: flex;
         gap: 30px;
+        align-items: end;
         .class-name {
             min-width: 300px;
-            font-size: 30px;
+            font-size: 32px;
+            font-weight: 600;
             color: $DarkColor;
         }
         .class-teachers {
@@ -19,6 +21,7 @@
             display: flex;
             align-items: end;   
             flex: 1;
+            font-size: 24px;
             .teacher {
                 background-color: #ffffff;
                 border-radius: 20px;
@@ -42,7 +45,7 @@
                     cursor: pointer;
                 }
             }
-            span {
+            .open-close {
                 margin-left: auto;
                 margin-right: 0;
                 background-color: #ffffff;
@@ -62,30 +65,36 @@
             }
         }
     }
-    .students {
-        margin-top: 20px;
-        .student {
-            background-color: #ffffff;
-            border-radius: 20px;
-            padding: 5px 10px;
-            margin: 0 5px;
+    .class-students {
+        width: 100%;
+        position: relative;
+        .students-add {
+            width: 100%;
             position: relative;
-            font-size: 15px;
-            align-content: center;
-            .delete-student {
-                background-color: #000000;
-                color: #ffffff;
-                position: absolute;
-                top: -5px;
-                right: 0px;
-                height: 10px;
-                width: 10px;
-                font-size: 8px;
-                padding: 3px;
-                border-radius: 50%;
-                text-align: center;
+            padding: 10px 0;
+            display: flex;
+            align-items: end;
+            font-size: 24px;
+            .open-close {
+                margin-left: auto;
+                margin-right: 0;
+                background-color: #ffffff;
+                border-radius: 20px;
+                height: 40px;
+                width: 40px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
                 cursor: pointer;
+            }      
+        }
+        .student {
+            padding: 5px 10px;
+            width: calc(100% - 20px);
+            &.even {
+                background-color: #C0C0C0;
             }
         }
+        
     }
 }

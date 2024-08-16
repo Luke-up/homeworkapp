@@ -64,32 +64,57 @@ const ClassesPage = () => {
                 classItem.teachers.includes(teacher.id) && (
                   <div key={teacher.id} className='teacher'>
                     {teacher.name}
-                    <div className="delete-teacher">X</div>
+                    <div className="delete-teacher">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <line x1="14.2441" y1="5.75874" x2="5.75886" y2="14.244" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                      <line x1="14.242" y1="14.2426" x2="5.75676" y2="5.75736" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                    </div>
                   </div>
                 )
               )) : null}
-              <span>X</span>
+              <span className="open-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+                  <line x1="1.5" y1="10.5" x2="19.5" y2="10.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
+                  <line x1="10.5" y1="1.5" x2="10.5" y2="19.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
+                </svg>
+              </span>
             </div>
           </div>
           <div className="class-students">
-            <span>Students:</span><span>X</span>
-            {classItem.students ? students.map((student) => (
+            <div className="students-add">
+              Students
+              <span className="open-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+                  <line x1="1.5" y1="10.5" x2="19.5" y2="10.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
+                  <line x1="10.5" y1="1.5" x2="10.5" y2="19.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
+                </svg>
+              </span>
+            </div>
+            {/* <div className="students-add">
+              <form>
+                <Input label="Add Student" type="text" required/>
+                <Button type="submit" text="Add Student"></Button>
+              </form>
+            </div> */}
+            {classItem.students ? 
+            students.map((student, index) => (
               classItem.students.includes(student.id) && (
-              <div key={student.id} className='student'>
+              <div key={student.id} className={`student ${index % 2 === 0 ? 'even' : 'odd'}`}>
                 {student.name}
               </div>
               )
-            )): null}
+            )) : null}
           </div>
-          {classItem.students && classItem.teachers ? <button type="submit" text="Delete Class">Delete Class</button> : ""}
+          {classItem.students.length === 0 && classItem.teachers.length === 0 ? <Button type="submit" text="Delete Class" color="dark">Delete Class</Button> : ""}
         </div>
       ))}
       <div className="class-item">
-          <form onSubmit={handleCreateNewClass} className="class-top new-class">
-            <Input label="Class Name" value={newClass} onChange={(e) => setNewClass(e.target.value)} type="text" required/>
-            <Button type="submit" text="Add Class"></Button>
-          </form>
-        </div>
+        <form onSubmit={handleCreateNewClass} className="class-top new-class">
+          <Input label="Class Name" value={newClass} onChange={(e) => setNewClass(e.target.value)} type="text" required/>
+          <Button type="submit" text="Add Class"></Button>
+        </form>
+      </div>
     </div>
   );
 };

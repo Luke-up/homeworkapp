@@ -13,4 +13,10 @@ button {
         background-color: lighten($SecondaryColor, 5%);
         cursor: pointer;
     }
+    &.dark {
+        background-color: $DarkColor;
+        &:hover {
+            background-color: lighten($DarkColor, 5%);
+        }
+    }
 }
