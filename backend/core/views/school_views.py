@@ -202,3 +202,28 @@ class AssignToClassView(APIView):
             return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
         except Class.DoesNotExist:
             return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteClassView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        data = request.data
+        class_id = data.get('class_id')
+        school = request.user.school_profile
+
+        if not class_id:
+            return Response({'error': 'Class ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        class_obj = school.classes.get(id=class_id)
+
+        if class_obj.students.exists():
+            return Response({'error': 'Cannot delete class with students'}, status=status.HTTP_400_BAD_REQUEST)
+        if class_obj.teachers.exists():
+            return Response({'error': 'Cannot delete class with teachers'}, status=status.HTTP_400_BAD_REQUEST)
+
+        class_obj.delete()
+        
+        return Response({'message': 'Class deleted successfully'}, status=status.HTTP_200_OK)
