@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from core.models import User, Class, Homework, Word, Teacher, Student
-from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
+from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, StudentDetailSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
 
 
 class CreateTeacherView(APIView):
@@ -227,3 +227,21 @@ class DeleteClassView(APIView):
         class_obj.delete()
         
         return Response({'message': 'Class deleted successfully'}, status=status.HTTP_200_OK)
+
+class ListStudentsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Ensure that only schools can list students
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Retrieve the school associated with the authenticated user
+        school = request.user.school_profile
+        
+        # Get all Students related to the school
+        students = Student.objects.filter(school=school)
+
+        serializer = StudentDetailSerializer(students, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)

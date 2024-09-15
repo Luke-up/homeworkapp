@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './classblock.scss';
 import Button from '../Button/Button';
+import Input from '../../components/Input/Input';
+import InputSelect from '../../components/InputSelect/InputSelect';
 import axiosInterceptor from '@/utils/axiosInterceptor';
 
 const ClassBlock = ({ classItem, teachers, students, fetchClasses}) => {
+    const [studentAdd, setStudentAdd] = useState('');
 
     const handleDeleteClass = async (e) => {
         e.preventDefault();
@@ -21,8 +24,14 @@ const ClassBlock = ({ classItem, teachers, students, fetchClasses}) => {
         }
       };
 
+    const toggleAddStudent = (classId) => (e) => {
+      e.preventDefault();
+      const form = document.querySelector(`#id_class_${classId} .class-students`);
+      form.classList.toggle('form-open');
+    }
+
     return (
-        <div className="class-item" key={classItem.id}>
+        <div className="class-item" key={classItem.id} id={`id_class_${classItem.id}`}>
           <div className="class-top">
             <div className="class-name">
             {classItem && classItem.name}
@@ -53,19 +62,20 @@ const ClassBlock = ({ classItem, teachers, students, fetchClasses}) => {
           <div className="class-students">
             <div className="students-add">
               Students
-              <span className="open-close">
+              <button className="open-close" onClick={toggleAddStudent(classItem.id)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                   <line x1="1.5" y1="10.5" x2="19.5" y2="10.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
                   <line x1="10.5" y1="1.5" x2="10.5" y2="19.5" stroke="black" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
-              </span>
+              </button>
             </div>
-            {/* <div className="students-add">
+            <div className="students-add-form">
               <form>
-                <Input label="Add Student" type="text" required/>
+                <InputSelect label="Add Student" value={studentAdd} onChange={setStudentAdd} type="text" options={students} required/>
+
                 <Button type="submit" text="Add Student"></Button>
               </form>
-            </div> */}
+            </div>
             {classItem.students ? 
             students.map((student, index) => (
               classItem.students.includes(student.id) && (

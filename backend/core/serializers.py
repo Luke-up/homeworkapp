@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Q
 from core.models import User, School, Teacher, Student, Class, Homework, Word, StudentHomework
 
 class UserSerializer(serializers.ModelSerializer):
@@ -105,7 +106,9 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'school', 'name', 'homework_assignments', 'effort_symbol', 'words']
     
     def get_homework_assignments(self, obj):
-        student_homework_assignments = StudentHomework.objects.filter(student=obj, marked=False, submitted=False)
+        student_homework_assignments = StudentHomework.objects.filter(
+            Q(student=obj) & (Q(marked=False) | Q(submitted=False))
+        )
         return StudentHomeworkSerializer(student_homework_assignments, many=True).data
 
 class TeacherDetailSerializer(serializers.ModelSerializer):

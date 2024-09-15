@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views.school_views import ListClassesView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView, DeleteClassView
+from .views.school_views import ListClassesView, ListStudentsView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView, DeleteClassView
 from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView, AuthStatusView, RefreshTokenView
 from .views.student_views import StudentDashboardView, StudentLexiconView, StudentHomeworkView, StudentHomeworkUpdateView
 from .views.teacher_views import TeacherDashboardView
@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('auth-status/', AuthStatusView.as_view(), name='auth-status'),
     path('refresh/', RefreshTokenView.as_view(), name='token_refresh'),
+    path('logout/', LogoutView.as_view(), name='logout'),
         # Homepage
             # No endpoints needed
 
@@ -69,6 +70,7 @@ urlpatterns = [
 
         # Student Search
             # Get students endpoint                     (school users)
+    path('students/', ListStudentsView.as_view(), name='list-students'),
             # Create student endpoint                   (school users)                      Done
     path('students/create/', CreateStudentView.as_view(), name='create_student'),
 

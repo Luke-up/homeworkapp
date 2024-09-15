@@ -6,6 +6,7 @@ import axiosInterceptor from '@/utils/axiosInterceptor';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import ClassBlock from '../../components/ClassBlock/ClassBlock';
+import Link from 'next/link';
 
 const ClassesPage = () => {
   const [classes, setClasses] = useState([]);
@@ -48,8 +49,22 @@ const ClassesPage = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await axiosInterceptor.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/logout/`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="classes">
+      <nav>
+        <Link href="/school/">Classes</Link>
+        <Link href="/school/students">Students</Link>
+        <Link href="/school/teachers">Teachers</Link>
+        <button onClick={handleLogout}>Logout</button>
+      </nav>
       <h1>Classes</h1>
       {classes.map((classItem) => (
         <ClassBlock key={classItem.id} classItem={classItem} teachers={teachers} students={students} fetchClasses={fetchClasses}/>

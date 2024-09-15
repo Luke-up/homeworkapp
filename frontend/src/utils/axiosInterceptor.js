@@ -39,6 +39,12 @@ axiosInterceptor.interceptors.response.use(
             }
         }
 
+        if (error.response.status === 403 || error.response.status === 401 || error.response.status === 404) {
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('refresh_token');
+            window.location.href = '/';
+        }
+
         return Promise.reject(error);
     }
 );

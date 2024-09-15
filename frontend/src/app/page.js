@@ -20,11 +20,11 @@ const HomePage = () => {
       .then(data => {
         const userType = data.userType;
         if (userType === 'school') {
-          router.push('/school-home');
+          router.push('/school');
         } else if (userType === 'teacher') {
-          router.push('/teacher-home');
+          router.push('/teacher');
         } else if (userType === 'student') {
-          router.push('/student-home');
+          router.push('/student');
         } else {
           router.push('/signup');
         }
