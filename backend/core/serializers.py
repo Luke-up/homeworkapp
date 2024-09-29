@@ -120,23 +120,21 @@ class TeacherDetailSerializer(serializers.ModelSerializer):
         model = Teacher
         fields = ['id', 'user', 'school', 'name', 'classes', 'students', 'homework']
 
-    def get_data(self, obj):
+    def get_classes(self, obj):
+            classes_teaching = obj.classes_teaching.all()
+            return ClassSerializer(classes_teaching, many=True).data
+
+    def get_students(self, obj):
         classes_teaching = obj.classes_teaching.all()
-
         students = Student.objects.filter(classes_enrolled__in=classes_teaching)
+        return StudentSerializer(students, many=True).data
 
+    def get_homework(self, obj):
+        classes_teaching = obj.classes_teaching.all()
+        students = Student.objects.filter(classes_enrolled__in=classes_teaching)
         student_homework = StudentHomework.objects.filter(
             student__in=students,
             submitted=True,
             marked=False
         ).select_related('homework')
-
-        return {
-            'classes': ClassSerializer(classes_teaching, many=True).data,
-            'students': StudentSerializer(students, many=True).data,
-            'homework': StudentHomeworkSerializer(student_homework, many=True).data
-        }
-
-    def to_representation(self, instance):
-        data = self.get_data(instance)
-        return data
+        return StudentHomeworkSerializer(student_homework, many=True).data

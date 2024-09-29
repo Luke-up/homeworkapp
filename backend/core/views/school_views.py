@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from core.models import User, Class, Homework, Word, Teacher, Student
-from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, StudentDetailSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
+from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, StudentDetailSerializer, TeacherDetailSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
 
 
 class CreateTeacherView(APIView):
@@ -243,5 +243,23 @@ class ListStudentsView(APIView):
         students = Student.objects.filter(school=school)
 
         serializer = StudentDetailSerializer(students, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ListTeachersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Ensure that only schools can list teachers
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Retrieve the school associated with the authenticated user
+        school = request.user.school_profile
+        
+        # Get all Teachers related to the school
+        teachers = Teacher.objects.filter(school=school)
+
+        serializer = TeacherDetailSerializer(teachers, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)

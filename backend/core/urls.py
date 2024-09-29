@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views.school_views import ListClassesView, ListStudentsView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView, DeleteClassView
+from .views.school_views import ListClassesView, ListStudentsView, ListTeachersView, CreateTeacherView, CreateStudentView, CreateClassView, AssignToClassView, CreateHomeworkView, DeleteClassView
 from .views.auth_views import RegisterUserView, LoginView, LogoutView, CreateSchoolView, AuthStatusView, RefreshTokenView
 from .views.student_views import StudentDashboardView, StudentLexiconView, StudentHomeworkView, StudentHomeworkUpdateView
 from .views.teacher_views import TeacherDashboardView
@@ -81,6 +81,7 @@ urlpatterns = [
 
         # Teacher Search
             # Get teachers endpoint                     (school users)
+    path('teachers/', ListTeachersView.as_view(), name='list-teachers'),
             # Create teacher endpoint                   (school users)                      Done
     path('teachers/create/', CreateTeacherView.as_view(), name='create_teacher'),
             # Update teacher endpoint                   (school users)
