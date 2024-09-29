@@ -1,37 +1,39 @@
+'use client';
+
 import './styles.scss';
 import { useState, useEffect } from 'react';
 import axiosInterceptor from '@/utils/axiosInterceptor';
 import Link from 'next/link';
 
-const StudentsPage = () => {
-  const [students, setStudents] = useState([]);
+const TeachersPage = () => {
+  const [teachers, setTeachers] = useState([]);
 
-  const fetchStudents = async () => {
+  const fetchTeachers = async () => {
     try {
-      const res = await axiosInterceptor.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/students/`);
+      const res = await axiosInterceptor.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/core/teachers/`);
       const data = await res.data;
-      setStudents(data.students);
+      setTeachers(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchStudents();
+    fetchTeachers();
   }, []);
 
   return (
     <div>
-      <h1>Students</h1>
+      <h1>Teachers</h1>
       <ul>
-        {students.map((student) => (
-          <li key={student.id}>
-            <Link href={`/school/students/${student.id}`}>{student.name}</Link>
+        {teachers ? teachers.map((teacher) => (
+          <li key={teacher.id}>
+            <Link href={`/school/teachers/${teacher.id}`}>{teacher.name}</Link>
           </li>
-        ))}
+        )): ''}
       </ul>
     </div>
   );
 };
 
-export default StudentsPage;
+export default TeachersPage;
