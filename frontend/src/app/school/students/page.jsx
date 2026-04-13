@@ -134,7 +134,7 @@ export default function SchoolStudentsSearchPage() {
                 <div className="school-dir-card__right">
                   <MarkStars markValue={s.recent_five_avg_mark} variant="light" />
                   <div className="school-dir-card__stats">
-                    Normal: {s.assignments_active ?? 0}
+                    Submitted: {s.assignments_active ?? 0}
                     <br />
                     Overdue: {s.assignments_overdue ?? 0}
                   </div>
