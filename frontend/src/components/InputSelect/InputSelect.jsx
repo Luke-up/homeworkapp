@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './inputselect.scss';
 
-const InputSelect = ({ label, onChange, type, options }) => {
+const InputSelect = ({ label, onChange, onSelectOption, type, options }) => {
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [value, setValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -32,7 +32,16 @@ const InputSelect = ({ label, onChange, type, options }) => {
           {filteredOptions.map((option, index) => {
             const optionText = typeof option === 'string' ? option : option.name;
             return (
-              <li key={index} onClick={() => setValue(optionText)}>
+              <li
+                key={index}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  setValue(optionText);
+                  if (onSelectOption) {
+                    onSelectOption(typeof option === 'string' ? { name: option } : option);
+                  }
+                }}
+              >
                 {optionText}
               </li>
             );

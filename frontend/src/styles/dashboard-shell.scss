@@ -1,0 +1,137 @@
+@import './global.scss';
+
+.dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.dashboard-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  width: 56px;
+  height: 100vh;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  transition: width 0.28s ease;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    width: 220px;
+  }
+
+  &__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    gap: 4px;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 0 8px 8px 0;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &.is-active {
+      background: rgba(143, 129, 0, 0.35);
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__label {
+    opacity: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.18s ease;
+    pointer-events: none;
+  }
+
+  &:hover &__label {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &__footer {
+    padding: 8px 0 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    border-radius: 0 8px 8px 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 56px;
+  min-height: 100vh;
+  width: calc(100% - 56px);
+  max-width: calc(100vw - 56px);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.dashboard-main-inner {
+  flex: 1 1 auto;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+  box-sizing: border-box;
+
+  &--full-width {
+    max-width: none;
+    width: 100%;
+  }
+}

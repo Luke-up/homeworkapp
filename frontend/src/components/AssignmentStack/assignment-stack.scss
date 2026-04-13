@@ -1,0 +1,150 @@
+@import '../../styles/global.scss';
+
+.assignment-stack__main-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.assignment-stack__hero-link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  min-height: 0;
+}
+
+.assignment-stack {
+  margin-bottom: 28px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &__headline {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 0 0 12px;
+    color: $DarkColor;
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 1fr minmax(140px, 36%);
+    gap: 0;
+    background: #fff;
+    border-radius: 0;
+    overflow: hidden;
+    border: 1px solid rgba(40, 40, 40, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  &__main {
+    padding: 20px 22px;
+  }
+
+  &__title {
+    margin: 0 0 14px;
+    font-size: 1.15rem;
+    color: $PrimaryColor;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__chip {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(54, 0, 108, 0.1);
+    border: 1px solid rgba(54, 0, 108, 0.2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $PrimaryColor;
+  }
+
+  &__muted {
+    margin: 0;
+    font-size: 0.88rem;
+    color: $DarkColor;
+    opacity: 0.7;
+  }
+
+  &__hero {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    margin: 12px;
+    border-radius: 0;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  &__hero-inner {
+    padding: 16px 16px 0;
+    flex: 1;
+  }
+
+  &__hero-meta {
+    margin: 0 0 6px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.9;
+  }
+
+  &__hero-due {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  &__hero-nav {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 12px 12px;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  &__nav-btn {
+    width: 36px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+  }
+
+  &__nav-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 56px;
+    text-align: center;
+    opacity: 0.95;
+  }
+
+  @media (max-width: 720px) {
+    &__card {
+      grid-template-columns: 1fr;
+    }
+
+    &__hero {
+      min-height: 180px;
+    }
+  }
+}

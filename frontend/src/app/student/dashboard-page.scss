@@ -1,0 +1,224 @@
+@import '../../styles/global.scss';
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.student-dash-header {
+  position: relative;
+  margin-bottom: 28px;
+  padding: 0 112px 0 0;
+  text-align: center;
+
+  @media (max-width: 560px) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 44px 0 8px;
+
+    .student-page-title {
+      order: 2;
+      margin-top: 10px;
+    }
+
+    .student-dash-header__badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: auto;
+      margin-top: 0;
+    }
+  }
+
+  .student-page-title {
+    font-size: 1.75rem;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $PrimaryColor;
+    padding: 6px 4px 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-family: inherit;
+
+    &:hover,
+    &:focus-visible {
+      background: none;
+      color: $PrimaryColor;
+      opacity: 1;
+    }
+  }
+}
+
+.student-dash-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.student-dash-stat-label {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: $DarkColor;
+  opacity: 0.55;
+}
+
+.student-effort-split {
+  background: $LightColor;
+  border-radius: 0;
+  padding: 22px 24px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+
+  &__profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 0 0 auto;
+    min-width: 140px;
+  }
+
+  &__avatar-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+    border: 2px solid rgba(54, 0, 108, 0.2);
+    margin-bottom: 12px;
+  }
+
+  &__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__avatar-ph {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: $PrimaryColor;
+    opacity: 0.55;
+  }
+
+  &__names {
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: $DarkColor;
+  }
+
+  &__first {
+    display: block;
+  }
+
+  &__last {
+    display: block;
+    opacity: 0.88;
+  }
+
+  &__effort {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+  }
+
+  &__stars {
+    margin-top: 8px;
+    transform: scale(1.35);
+    transform-origin: center center;
+  }
+
+  @media (max-width: 560px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__profile {
+      flex-direction: row;
+      text-align: left;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    &__avatar-wrap {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.student-words-block {
+  background: $LightColor;
+  border-radius: 0;
+  padding: 22px 24px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+
+  &__count {
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1;
+    color: $PrimaryColor;
+    margin: 8px 0 16px;
+  }
+
+  &__caption {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: $DarkColor;
+    max-width: 320px;
+  }
+}
+
+.student-dash-loading {
+  padding: 48px 24px;
+  text-align: center;
+  color: $DarkColor;
+  opacity: 0.7;
+}

@@ -1,0 +1,115 @@
+@import '../../../styles/global.scss';
+
+$lex-stripe-a: #d9d9d9;
+$lex-stripe-b: #c0c0c0;
+
+.lexicon-page {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+
+  &__intro {
+    margin-bottom: 24px;
+  }
+
+  .student-page-title {
+    margin-bottom: 14px;
+  }
+
+  &__orderby {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__orderby-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $DarkColor;
+  }
+
+  &__select {
+    min-width: 200px;
+    padding: 10px 12px;
+    font: inherit;
+    font-weight: 600;
+    color: $DarkColor;
+    border: 1px solid rgba(40, 40, 40, 0.35);
+    border-radius: 0;
+    background: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: $PrimaryColor;
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: 2px solid $SecondaryColor;
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  &__table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid rgba(40, 40, 40, 0.15);
+    background: #fff;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $DarkColor;
+    background: #eaeaea;
+    border-bottom: 1px solid rgba(40, 40, 40, 0.2);
+  }
+
+  thead th:first-child {
+    width: 22%;
+    min-width: 140px;
+  }
+
+  tbody tr:nth-child(odd) td {
+    background-color: $lex-stripe-a;
+  }
+
+  tbody tr:nth-child(even) td {
+    background-color: $lex-stripe-b;
+  }
+
+  tbody td {
+    padding: 16px 18px;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(40, 40, 40, 0.08);
+    line-height: 1.55;
+    font-size: 0.95rem;
+    color: $DarkColor;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  &__cell-word {
+    font-weight: 700;
+    font-size: 1.02rem;
+  }
+
+  &__cell-sentence {
+    font-weight: 400;
+  }
+}

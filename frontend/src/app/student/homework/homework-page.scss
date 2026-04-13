@@ -1,0 +1,175 @@
+@import '../../../styles/global.scss';
+
+.homework-tile-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.homework-page {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+
+  &__intro {
+    margin-bottom: 20px;
+
+    .student-page-title {
+      margin-bottom: 0;
+    }
+  }
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    margin-bottom: 28px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(40, 40, 40, 0.12);
+  }
+
+  &__toolbar-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+  }
+
+  &__toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__field-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $DarkColor;
+  }
+
+  &__select {
+    min-width: 180px;
+    padding: 10px 12px;
+    font: inherit;
+    font-weight: 600;
+    color: $DarkColor;
+    border: 1px solid rgba(40, 40, 40, 0.35);
+    border-radius: 0;
+    background: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: $PrimaryColor;
+    }
+
+    &:focus {
+      outline: 2px solid $PrimaryColor;
+      outline-offset: 2px;
+    }
+  }
+
+  &__checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $DarkColor;
+    cursor: pointer;
+    user-select: none;
+
+    input {
+      width: 16px;
+      height: 16px;
+      accent-color: $PrimaryColor;
+      cursor: pointer;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 18px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  &__empty {
+    padding: 32px 16px;
+    text-align: center;
+    border: 1px dashed rgba(40, 40, 40, 0.2);
+    background: rgba(0, 0, 0, 0.02);
+    font-size: 0.95rem;
+    color: $DarkColor;
+    opacity: 0.85;
+  }
+
+  &__empty-hint {
+    margin-top: 10px;
+    font-size: 0.88rem;
+  }
+}
+
+.homework-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid rgba(40, 40, 40, 0.18);
+  box-sizing: border-box;
+  background: #2a2a2a;
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+
+  &__fallback {
+    position: absolute;
+    inset: 0;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 12px 14px;
+    box-sizing: border-box;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.08) 42%,
+      rgba(0, 0, 0, 0.25) 70%,
+      rgba(0, 0, 0, 0.82) 100%
+    );
+    pointer-events: none;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__marks {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

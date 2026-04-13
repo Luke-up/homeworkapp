@@ -6,8 +6,15 @@ __pycache__/
 
 # Environment-related
 venv/
+.venv/
+backend/.venv/
 .env
 frontend/.env.local
+
+# Local / IDE
+.cursor/
+backend/db.sqlite3
+*.sqlite3
 
 # Docker-related
 Dockerfile
@@ -16,13 +23,10 @@ docker-compose.yml
 # Node.js-related
 frontend/node_modules/
 
-# Next.js-related
-frontend/.next/types/
+# Next.js build output (regenerate with npm run build)
+frontend/.next/
 
-# Next.js cache and build artifacts
-frontend/.next/cache/
-frontend/.next/server/
-frontend/.next/static/
+# Django migrations must be committed for deploy — do not ignore
 
-# Django migrations
-backend/core/migrations/
+# collectstatic (production / local test)
+backend/staticfiles/

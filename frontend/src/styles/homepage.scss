@@ -28,12 +28,78 @@
                 text-align: center;
             }
         }
+
+        .home-live-demo-error {
+            margin: 14px 0 0;
+            font-size: 0.85rem;
+            color: #ffb4b4;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .home-live-demo-recaptcha {
+            margin: 18px auto 0;
+            display: flex;
+            justify-content: center;
+            transform-origin: top center;
+
+            @media (max-width: 520px) {
+                transform: scale(0.88);
+            }
+        }
+
+        .home-live-demo-wrap {
+            margin: 10px 0 0 !important;
+            text-align: center;
+            clear: both;
+        }
+
+        .home-live-demo-link {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: $SecondaryColor;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+
+            &:hover:not(:disabled) {
+                color: #c4b435;
+            }
+
+            &:disabled {
+                opacity: 0.65;
+                cursor: wait;
+            }
+        }
+
+        .home-live-demo-hint {
+            margin: 8px 0 0 !important;
+            font-size: 0.75rem !important;
+            line-height: 1.45;
+            color: $TextColor !important;
+            text-align: center;
+            max-width: 420px;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 32px;
+        }
         .button {
-            display: block;
+            display: inline-block;
             width: 100%;
             max-width: 200px;
-            margin: 0 auto;
-            margin-top: 32px;
+            margin: 0;
             padding: 24px;
             background-color: $LightColor;
             color: $DarkColor;
@@ -41,10 +107,129 @@
             border-radius: 4px;
             text-transform: uppercase;
             font-weight: bold;
-            transition: background-color 0.3s;
+            text-decoration: none;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+            border: 2px solid transparent;
+            box-sizing: border-box;
             &:hover {
                 background-color: $SecondaryColor;
+            }
+            &.button-outline {
+                background-color: transparent;
+                color: #ffffff;
+                border-color: $LightColor;
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.08);
+                    border-color: $SecondaryColor;
+                    color: $SecondaryColor;
+                }
             }
         }
     }
 }
+
+.home-faq {
+    background-color: $LightColor;
+    color: $DarkColor;
+    padding: 56px 24px 72px;
+
+    .home-faq-inner {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        margin: 0 0 28px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
+
+.accordion {
+    overflow: hidden;
+    border: 1px solid rgba(40, 40, 40, 0.15);
+    background: #fff;
+}
+
+$accordion-stripe-a: #d9d9d9;
+$accordion-stripe-b: #c0c0c0;
+
+.accordion-item {
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:nth-child(odd) .accordion-trigger {
+        background-color: $accordion-stripe-a;
+    }
+
+    &:nth-child(even) .accordion-trigger {
+        background-color: $accordion-stripe-b;
+    }
+
+    &:nth-child(odd) .accordion-trigger:hover {
+        background-color: #cecece;
+    }
+
+    &:nth-child(even) .accordion-trigger:hover {
+        background-color: #b3b3b3;
+    }
+
+}
+
+.accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border: none;
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    color: $DarkColor;
+    transition: background 0.2s;
+
+    .accordion-icon {
+        flex-shrink: 0;
+        font-size: 1.35rem;
+        font-weight: 400;
+        line-height: 1;
+        color: $PrimaryColor;
+        width: 1.5rem;
+        text-align: center;
+    }
+}
+
+.accordion-panel {
+    border-top: 1px solid rgba(40, 40, 40, 0.08);
+    background: #fafafa;
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.accordion-panel-inner {
+    padding: 16px 20px 22px;
+    line-height: 1.55;
+    font-size: 0.95rem;
+
+    p {
+        margin: 0 0 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    a {
+        color: $SecondaryColor;
+        font-weight: 600;
+    }
+}
+
+@import './site-footer.scss';
