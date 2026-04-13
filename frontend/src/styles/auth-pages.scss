@@ -1,0 +1,72 @@
+@import './global.scss';
+
+.login,
+.signup {
+  width: 100%;
+  max-width: min(500px, calc(100vw - 24px));
+  margin: 0 auto;
+  margin-top: 48px;
+  background-color: $DarkColor;
+  padding: clamp(18px, 4vw, 30px);
+  box-sizing: border-box;
+  border-radius: 6px;
+
+  @media (max-width: 400px) {
+    max-width: calc(100vw - 16px);
+    margin-top: 24px;
+    padding: 16px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .auth-page-error {
+    color: #ffc9c9;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+
+  form::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+
+  button {
+    float: right;
+  }
+
+  p {
+    color: #aaaaaa;
+    margin-top: 24px;
+    font-size: 14px;
+    clear: both;
+
+    a {
+      color: $SecondaryColor;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #a99800;
+      }
+    }
+  }
+}
+
+.signup-recaptcha {
+  margin: 18px 0 8px;
+  display: flex;
+  justify-content: center;
+  transform-origin: top center;
+
+  @media (max-width: 400px) {
+    transform: scale(0.9);
+    margin-left: -4%;
+    margin-right: -4%;
+  }
+}

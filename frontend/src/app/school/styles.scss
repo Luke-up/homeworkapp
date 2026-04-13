@@ -1,0 +1,19 @@
+@import '../../styles/global.scss';
+
+.class-item {
+    width: 940px;
+    padding: 30px;
+    margin: 20px auto;
+    background-color: $LightColor;
+    .class-top {
+        display: flex;
+        gap: 30px;
+        align-items: end;
+        &.new-class {
+            align-items: center;
+            .input {
+                flex: 1;
+            }
+        }
+    }
+}

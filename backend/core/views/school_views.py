@@ -1,12 +1,60 @@
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+"""School-admin API: classes, student/teacher directory and detail, homework create/delete, global word list/delete."""
+
 from rest_framework import status
-from rest_framework.views import APIView
-from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from core.models import User, Class, Homework, Word, Teacher, Student
-from core.serializers import UserSerializer, SchoolSerializer, TeacherSerializer, StudentSerializer, ClassSerializer, HomeworkSerializer, WordSerializer, SchoolDetailSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from core.access import teacher_can_access_class
+from core.models import Class, Homework, Student, Teacher, User, Word
+from core.serializers import (
+    ClassSerializer,
+    HomeworkSerializer,
+    SchoolDetailSerializer,
+    SchoolSerializer,
+    SchoolStudentDetailProfileSerializer,
+    SchoolStudentDirectorySerializer,
+    SchoolTeacherDirectorySerializer,
+    StudentSerializer,
+    TeacherDetailSerializer,
+    TeacherSerializer,
+    UserSerializer,
+    WordSerializer,
+)
+
+
+def _apply_user_email_and_password(user, data):
+    """
+    Optional email and/or password update for a User row (school admin).
+    Returns a Response with an error, or None if successful / nothing to do.
+    """
+    if 'email' in data:
+        new_email = (data.get('email') or '').strip().lower()
+        if not new_email:
+            return Response({'error': 'email cannot be empty'}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
+            return Response({'error': 'That email is already in use'}, status=status.HTTP_400_BAD_REQUEST)
+        user.email = new_email
+        user.save(update_fields=['email'])
+
+    password = data.get('password')
+    password_confirm = data.get('password_confirm')
+    if password or password_confirm:
+        if not password or not password_confirm:
+            return Response(
+                {'error': 'Both password and password_confirm are required to change password'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if password != password_confirm:
+            return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        if len(password) < 8:
+            return Response(
+                {'error': 'Password must be at least 8 characters'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user.set_password(password)
+        user.save()
+    return None
 
 
 class CreateTeacherView(APIView):
@@ -141,14 +189,26 @@ class CreateHomeworkView(APIView):
             return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
         
         data = request.data
-        
-        # Check if the user is a teacher and if so, ensure they are linked to a valid school
+        class_id = data.get('class_field')
+
         if request.user.user_type == 'teacher':
-            teacher_school_id = request.user.teacher_profile.school.id
-            class_id = data.get('class_field')
-            if class_id and not Class.objects.filter(id=class_id, school=teacher_school_id).exists():
-                return Response({'error': 'Invalid class for this teacher\'s school'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            if not class_id:
+                return Response({'error': 'class_field is required'}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                class_obj = Class.objects.get(pk=class_id)
+            except Class.DoesNotExist:
+                return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+            if not teacher_can_access_class(request.user, class_obj):
+                return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        elif request.user.user_type == 'school':
+            if class_id:
+                try:
+                    class_obj = Class.objects.get(pk=class_id)
+                except Class.DoesNotExist:
+                    return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+                if class_obj.school_id != request.user.school_profile.id:
+                    return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = HomeworkSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -167,15 +227,26 @@ class AssignToClassView(APIView):
         class_id = data.get('class_id')
         teacher_id = data.get('teacher_id')
         student_id = data.get('student_id')
+        remove = data.get('remove') in (True, 'true', '1', 1)
 
         if not class_id:
             return Response({'error': 'Class ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         school = request.user.school_profile
 
+        if remove:
+            if teacher_id:
+                return self.remove_teacher_from_class(school, class_id, teacher_id)
+            if student_id:
+                return self.remove_student_from_class(school, class_id, student_id)
+            return Response(
+                {'error': 'remove requires teacher_id or student_id'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if teacher_id:
             return self.assign_teacher_to_class(school, class_id, teacher_id)
-        
+
         if student_id:
             return self.assign_student_to_class(school, class_id, student_id)
 
@@ -202,3 +273,264 @@ class AssignToClassView(APIView):
             return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
         except Class.DoesNotExist:
             return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def remove_teacher_from_class(self, school, class_id, teacher_id):
+        try:
+            teacher = school.teachers.get(id=teacher_id)
+            class_obj = school.classes.get(id=class_id)
+            class_obj.teachers.remove(teacher)
+            return Response({'message': 'Teacher removed from class successfully'}, status=status.HTTP_200_OK)
+        except Teacher.DoesNotExist:
+            return Response({'error': 'Teacher not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def remove_student_from_class(self, school, class_id, student_id):
+        try:
+            student = school.students.get(id=student_id)
+            class_obj = school.classes.get(id=class_id)
+            class_obj.students.remove(student)
+            return Response({'message': 'Student removed from class successfully'}, status=status.HTTP_200_OK)
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteClassView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        data = request.data
+        class_id = data.get('class_id')
+        school = request.user.school_profile
+
+        if not class_id:
+            return Response({'error': 'Class ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            class_obj = school.classes.get(id=class_id)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        if class_obj.students.exists():
+            return Response({'error': 'Cannot delete class with students'}, status=status.HTTP_400_BAD_REQUEST)
+        if class_obj.teachers.exists():
+            return Response({'error': 'Cannot delete class with teachers'}, status=status.HTTP_400_BAD_REQUEST)
+
+        class_obj.delete()
+        
+        return Response({'message': 'Class deleted successfully'}, status=status.HTTP_200_OK)
+
+class ListStudentsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Ensure that only schools can list students
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Retrieve the school associated with the authenticated user
+        school = request.user.school_profile
+        
+        # Get all Students related to the school
+        students = Student.objects.filter(school=school).prefetch_related('classes_enrolled')
+
+        serializer = SchoolStudentDirectorySerializer(students, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ListTeachersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Ensure that only schools can list teachers
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Retrieve the school associated with the authenticated user
+        school = request.user.school_profile
+        
+        # Get all Teachers related to the school
+        teachers = Teacher.objects.filter(school=school).prefetch_related('classes_teaching')
+
+        serializer = SchoolTeacherDirectorySerializer(teachers, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class StudentDetailView(APIView):
+    """School-scoped student directory: get / patch / delete one student."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            student = (
+                school.students.select_related('user')
+                .prefetch_related('classes_enrolled')
+                .get(pk=pk)
+            )
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(SchoolStudentDetailProfileSerializer(student).data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            student = school.students.select_related('user').get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        if 'name' in request.data:
+            student.name = request.data['name']
+            student.user.name = request.data['name']
+            student.user.save(update_fields=['name'])
+        if 'effort_symbol' in request.data:
+            student.effort_symbol = request.data['effort_symbol']
+        err = _apply_user_email_and_password(student.user, request.data)
+        if err is not None:
+            return err
+        student.save()
+        return Response(StudentSerializer(student).data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            student = school.students.get(pk=pk)
+        except Student.DoesNotExist:
+            return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+        student.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TeacherDetailView(APIView):
+    """School-scoped teacher directory: get / patch / delete one teacher."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            teacher = school.teachers.get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'error': 'Teacher not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(TeacherDetailSerializer(teacher).data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            teacher = school.teachers.select_related('user').get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'error': 'Teacher not found'}, status=status.HTTP_404_NOT_FOUND)
+        if 'name' in request.data:
+            teacher.name = request.data['name']
+            teacher.user.name = request.data['name']
+            teacher.user.save(update_fields=['name'])
+            teacher.save(update_fields=['name'])
+        err = _apply_user_email_and_password(teacher.user, request.data)
+        if err is not None:
+            return err
+        return Response(TeacherSerializer(teacher).data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        school = request.user.school_profile
+        try:
+            teacher = school.teachers.get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'error': 'Teacher not found'}, status=status.HTTP_404_NOT_FOUND)
+        teacher.user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UpdateClassView(APIView):
+    """School admin: patch name / description / level on a class."""
+
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        class_id = request.data.get('class_id')
+        if not class_id:
+            return Response({'error': 'class_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        school = request.user.school_profile
+        try:
+            class_obj = school.classes.get(pk=class_id)
+        except Class.DoesNotExist:
+            return Response({'error': 'Class not found'}, status=status.HTTP_404_NOT_FOUND)
+        for field in ('name', 'description', 'level'):
+            if field in request.data:
+                setattr(class_obj, field, request.data[field])
+        class_obj.save()
+        return Response(ClassSerializer(class_obj).data, status=status.HTTP_200_OK)
+
+
+class DeleteHomeworkView(APIView):
+    """School admin: delete a homework row (must belong to this school)."""
+
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        homework_id = request.data.get('homework_id')
+        if not homework_id:
+            return Response({'error': 'homework_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        school = request.user.school_profile
+        try:
+            hw = Homework.objects.select_related('class_field').get(pk=homework_id)
+        except Homework.DoesNotExist:
+            return Response({'error': 'Homework not found'}, status=status.HTTP_404_NOT_FOUND)
+        if hw.class_field.school_id != school.id:
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        hw.delete()
+        return Response({'message': 'Homework deleted successfully'}, status=status.HTTP_200_OK)
+
+
+class ListWordsView(APIView):
+    """Global word bank listing (school or teacher). Optional ?q= filter."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.user_type not in ('school', 'teacher'):
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        q = request.query_params.get('q', '').strip()
+        words = Word.objects.all().order_by('word')
+        if q:
+            words = words.filter(word__icontains=q)
+        return Response(WordSerializer(words, many=True).data, status=status.HTTP_200_OK)
+
+
+class DeleteWordView(APIView):
+    """School admin: delete a word from the global bank."""
+
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+        if request.user.user_type != 'school':
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        word_id = request.data.get('word_id')
+        if not word_id:
+            return Response({'error': 'word_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            word = Word.objects.get(pk=word_id)
+        except Word.DoesNotExist:
+            return Response({'error': 'Word not found'}, status=status.HTTP_404_NOT_FOUND)
+        word.delete()
+        return Response({'message': 'Word deleted successfully'}, status=status.HTTP_200_OK)

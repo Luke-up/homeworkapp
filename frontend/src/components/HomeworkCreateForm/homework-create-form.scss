@@ -1,0 +1,249 @@
+@import '../../styles/global.scss';
+
+.teacher-homework-create {
+  &__form {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  &__top-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 20px 28px;
+    align-items: start;
+    margin-bottom: 4px;
+
+    @media (max-width: 720px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__top-fields {
+    min-width: 0;
+  }
+
+  &__cover-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+
+    @media (max-width: 720px) {
+      max-width: 280px;
+    }
+  }
+
+  &__cover-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: $DarkColor;
+    opacity: 0.55;
+    margin: 0;
+  }
+
+  &__cover-preview {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #e8e8e8;
+    border: 1px solid #bbb;
+    object-fit: cover;
+    display: block;
+    box-sizing: border-box;
+  }
+
+  &__cover-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #ececec;
+    border: 1px dashed rgba(40, 40, 40, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    color: rgba(40, 40, 40, 0.45);
+    text-align: center;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  &__cover-btn {
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    border: 2px solid $PrimaryColor;
+    background: #fff;
+    color: $PrimaryColor;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:hover {
+      background: rgba(54, 0, 108, 0.06);
+    }
+  }
+
+  &__label {
+    display: block;
+    font-weight: 700;
+    margin: 18px 0 6px;
+    font-size: 0.9rem;
+    color: $DarkColor;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  &__top-fields &__label:first-of-type {
+    margin-top: 0;
+  }
+
+  &__section-title {
+    margin: 28px 0 12px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $DarkColor;
+    opacity: 0.65;
+  }
+
+  &__input,
+  &__textarea {
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #bbb;
+    border-radius: 0;
+
+    &--narrow {
+      max-width: 240px;
+      width: 100%;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__word-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  &__word-row-inputs {
+    flex: 1 1 280px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    min-width: 0;
+
+    @media (max-width: 560px) {
+      grid-template-columns: 1fr;
+      flex-basis: 100%;
+    }
+  }
+
+  &__question-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-bottom: 10px;
+
+    .teacher-homework-create__input {
+      flex: 1 1 200px;
+      min-width: 0;
+    }
+  }
+
+  &__remove-btn {
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 6px 10px;
+    border: 1px solid rgba(40, 40, 40, 0.28);
+    background: rgba(255, 255, 255, 0.85);
+    color: rgba(40, 40, 40, 0.55);
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+
+    &:hover {
+      color: #8b0000;
+      border-color: rgba(139, 0, 0, 0.45);
+    }
+  }
+
+  &__row-button {
+    display: block;
+    width: 100%;
+    font: inherit;
+    font-weight: 700;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border: 2px dashed rgba(40, 40, 40, 0.35);
+    background: rgba(255, 255, 255, 0.6);
+    color: $PrimaryColor;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: $PrimaryColor;
+      background: rgba(54, 0, 108, 0.06);
+    }
+  }
+
+  &__footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 24px;
+    margin-top: 28px;
+  }
+
+  &__due-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 0 1 auto;
+    min-width: 0;
+
+    .teacher-homework-create__label {
+      margin: 0;
+    }
+  }
+
+  &__submit {
+    margin-top: 0;
+    width: auto;
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 560px) {
+    &__footer-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__submit {
+      width: 100%;
+      max-width: none;
+    }
+
+    &__due-wrap .teacher-homework-create__input--narrow {
+      max-width: none;
+    }
+  }
+}

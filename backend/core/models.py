@@ -49,6 +49,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class School(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='school_profile')
     name = models.CharField(max_length=255)
+    # When set, this school is a browser "live demo": delete after this time (see demo_session).
+    demo_expires_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -68,6 +70,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher_profile')
     school = models.ForeignKey(School, related_name='teachers', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    avatar_url = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return f"Teacher Profile: {self.user.email}"
@@ -76,21 +79,27 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     school = models.ForeignKey(School, related_name='students', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    avatar_url = models.URLField(max_length=500, blank=True)
     effort_symbol = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-    words = models.ManyToManyField('Word', related_name='students', blank=True)
 
     def __str__(self):
         return f"Student Profile: {self.user.email}"
 
 class Homework(models.Model):
+    """
+    ``questions`` is a JSON list of objects, e.g. ``[{"q": "...", "type": "short"}]``.
+    The API normalizes each item to also include a ``question`` key (same text as ``q``).
+    """
+
     title = models.CharField(max_length=255)
     level = models.IntegerField()
     class_field = models.ForeignKey('Class', related_name='homework_classes', on_delete=models.CASCADE)
+    cover_image_url = models.URLField(max_length=500, blank=True)
     words = models.ManyToManyField('Word', related_name='homework_related', blank=True)
     reading = models.TextField(blank=True)
     summary = models.TextField(blank=True)
     questions = models.JSONField(blank=True, null=True)
-    due_date = models.DateTimeField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -103,7 +112,22 @@ class StudentHomework(models.Model):
     mark_value = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     submission_date = models.DateTimeField(null=True, blank=True)
     teacher_comment = models.TextField(blank=True)
+    # JSON list of {"question": str, "answer": str} aligned with Homework.questions (snapshot + response).
     answers = models.JSONField(blank=True, null=True)
+
+    def sync_answers_from_homework_questions(self):
+        """While not submitted, keep answer rows aligned with homework.questions (question text from template)."""
+        if not self.homework_id or self.submitted:
+            return
+        from core.student_homework_answers import merge_student_answer_rows
+
+        qs = self.homework.questions
+        self.answers = merge_student_answer_rows(qs if isinstance(qs, list) else [], self.answers)
+
+    def save(self, *args, **kwargs):
+        if not self.submitted:
+            self.sync_answers_from_homework_questions()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.homework.title} - {self.student.user.email}"

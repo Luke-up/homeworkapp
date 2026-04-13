@@ -1,0 +1,30 @@
+@import '../../styles/global.scss';
+
+.input {
+    input {
+        width: calc(100% - 24px);
+        padding: 12px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        border: 1px solid $LightColor;
+        border-radius: 4px;
+    }
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        li {
+            padding: 8px;
+            cursor: pointer;
+            &:hover {
+                background: #f0f0f0;
+            }
+        }
+    }
+}

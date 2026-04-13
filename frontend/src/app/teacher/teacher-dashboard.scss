@@ -1,0 +1,342 @@
+@import '../../styles/global.scss';
+
+$teacher-table-a: #d9d9d9;
+$teacher-table-b: #c0c0c0;
+$teacher-table-head: #c0c0c0;
+
+/* Match student dashboard header (teacher account link, top-right). */
+.student-dash-header {
+  position: relative;
+  margin-bottom: 28px;
+  padding: 0 112px 0 0;
+  text-align: center;
+
+  @media (max-width: 560px) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 44px 0 8px;
+
+    .student-page-title {
+      order: 2;
+      margin-top: 10px;
+    }
+
+    .student-dash-header__badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: auto;
+      margin-top: 0;
+    }
+  }
+
+  .student-page-title {
+    font-size: 1.75rem;
+  }
+
+  .student-dash-header__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $PrimaryColor;
+    padding: 6px 4px 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-family: inherit;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+.teacher-dash-loading {
+  padding: 48px 24px;
+  text-align: center;
+  color: $DarkColor;
+  opacity: 0.7;
+}
+
+.teacher-dash-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.teacher-dash-profile {
+  background: $LightColor;
+  padding: 22px 24px;
+}
+
+.teacher-dash-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.teacher-dash-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.teacher-dash-avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: $PrimaryColor;
+  background: rgba(54, 0, 108, 0.12);
+}
+
+.teacher-dash-names {
+  text-align: left;
+
+  .teacher-dash-first {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: $DarkColor;
+    line-height: 1.2;
+  }
+
+  .teacher-dash-last {
+    margin: 4px 0 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: $DarkColor;
+    opacity: 0.75;
+  }
+}
+
+.teacher-dash-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  td {
+    padding: 8px 0;
+    text-align: left;
+    border: none;
+  }
+
+  td:last-child {
+    font-weight: 700;
+    text-align: right;
+    color: $DarkColor;
+  }
+}
+
+.teacher-dash-class-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.teacher-dash-class-card {
+  position: relative;
+  min-height: 140px;
+  border-radius: 0;
+  overflow: hidden;
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, hsl(265, 42%, 32%), hsl(265, 55%, 16%));
+  }
+
+  &__overlay {
+    position: relative;
+    z-index: 1;
+    padding: 18px 20px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.2));
+  }
+
+  &__title {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  &__meta {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    opacity: 0.95;
+  }
+}
+
+.teacher-dash-queue {
+  background: $teacher-table-a;
+  color: $DarkColor;
+  padding: 24px 22px 28px;
+  margin-bottom: 28px;
+  box-sizing: border-box;
+
+  &__title {
+    margin: 0 0 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $PrimaryColor;
+    text-align: center;
+    width: 100%;
+  }
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 18px;
+  }
+
+  &__inline-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__inline-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $DarkColor;
+    white-space: nowrap;
+  }
+
+  &__select {
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    min-width: 180px;
+    border-radius: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    color: $DarkColor;
+
+    &--outlined {
+      border: 2px solid rgba(40, 40, 40, 0.45);
+      background: transparent;
+
+      &:hover {
+        border-color: $PrimaryColor;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: 2px solid $SecondaryColor;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+
+    &--solid {
+      border: 2px solid $PrimaryColor;
+      background: $PrimaryColor;
+      color: #fff;
+
+      &:hover {
+        opacity: 0.92;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: 2px solid $SecondaryColor;
+        outline-offset: 2px;
+        box-shadow: none;
+      }
+    }
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(40, 40, 40, 0.12);
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    thead th {
+      text-align: left;
+      padding: 12px 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: $DarkColor;
+      background: $teacher-table-head;
+      border-bottom: 1px solid rgba(40, 40, 40, 0.2);
+    }
+
+    tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(40, 40, 40, 0.08);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(odd) td {
+      background-color: $teacher-table-a;
+    }
+
+    tbody tr:nth-child(even) td {
+      background-color: $teacher-table-b;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  &__row {
+    cursor: pointer;
+    transition: filter 0.12s ease;
+
+    &:hover td {
+      filter: brightness(0.97);
+    }
+  }
+}

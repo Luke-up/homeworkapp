@@ -1,0 +1,64 @@
+@import '../../styles/global.scss';
+
+.mark-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 0;
+
+  &__slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__svg {
+    display: block;
+    width: 1.15em;
+    height: 1.15em;
+
+    &--star {
+      color: $SecondaryColor;
+      filter: none;
+    }
+
+    &--circle {
+      color: rgba(255, 255, 255, 0.6);
+      width: 1.05em;
+      height: 1.05em;
+    }
+  }
+
+  &--light {
+    .mark-stars__svg--circle {
+      color: rgba(40, 40, 40, 0.45);
+    }
+  }
+
+  &--dashboard {
+    .mark-stars__svg--star {
+      color: $SecondaryColor;
+    }
+
+    .mark-stars__svg--circle {
+      color: rgba(40, 40, 40, 0.42);
+    }
+  }
+
+  &--filled-only {
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #282828;
+    gap: 4px;
+
+    &.mark-stars--dashboard {
+      font-size: 1.65rem;
+      color: #282828;
+
+      .mark-stars__svg--star {
+        color: $SecondaryColor;
+      }
+    }
+  }
+}

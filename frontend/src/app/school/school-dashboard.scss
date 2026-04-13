@@ -1,0 +1,188 @@
+@import '../../styles/global.scss';
+
+.school-main {
+  padding-bottom: 48px;
+}
+
+.school-dashboard {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  &__intro {
+    text-align: center;
+    padding: 12px 0 28px;
+    margin-bottom: 4px;
+    background: transparent;
+    border: none;
+  }
+
+  &__school-name {
+    margin: 0 0 14px;
+    font-size: 2.125rem;
+    font-weight: 800;
+    color: $PrimaryColor;
+    line-height: 1.15;
+  }
+
+  &__stats {
+    margin: 0;
+    font-size: 1.05rem;
+    color: $DarkColor;
+    line-height: 1.6;
+    text-align: center;
+
+    strong {
+      font-weight: 800;
+      color: $DarkColor;
+    }
+  }
+
+  &__section-title {
+    margin: 0 0 18px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $DarkColor;
+    opacity: 0.55;
+    text-align: center;
+  }
+
+  &__classes {
+    margin-bottom: 12px;
+  }
+
+  &__create-toggle {
+    display: block;
+    width: 100%;
+    font: inherit;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 0;
+    background: $PrimaryColor;
+    color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:hover {
+      opacity: 0.94;
+    }
+  }
+
+  &__create-panel {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(40, 40, 40, 0.15);
+    padding: 18px 20px;
+    margin-bottom: 24px;
+  }
+
+  &__create-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  &__create-input {
+    font: inherit;
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+  }
+
+  &__create-submit {
+    font: inherit;
+    font-weight: 700;
+    padding: 10px 22px;
+    background: $DarkColor;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.55;
+    }
+  }
+
+  &__muted {
+    margin: 8px 0 0;
+    font-size: 0.88rem;
+    color: $DarkColor;
+    opacity: 0.65;
+  }
+}
+
+.school-search-page {
+  &__title {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $PrimaryColor;
+    text-align: center;
+  }
+
+  &__search {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto 24px;
+    display: block;
+    font: inherit;
+    padding: 12px 14px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid rgba(40, 40, 40, 0.12);
+  }
+
+  &__li {
+    border-bottom: 1px solid rgba(40, 40, 40, 0.08);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:nth-child(odd) a {
+      background: #d9d9d9;
+    }
+
+    &:nth-child(even) a {
+      background: #c0c0c0;
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: 14px 18px;
+    font-weight: 600;
+    color: $PrimaryColor;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 24px;
+    color: $DarkColor;
+    opacity: 0.65;
+  }
+}

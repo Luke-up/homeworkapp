@@ -1,0 +1,65 @@
+@import '../../styles/global.scss';
+
+.panel {
+  background: $LightColor;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+
+  h2 {
+    margin: 0 0 12px;
+    color: $PrimaryColor;
+    font-size: 1.25rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+}
+
+.mark-row {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #bbb;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-family: inherit;
+  }
+
+  textarea {
+    min-height: 72px;
+    max-width: 100%;
+  }
+
+  .row-actions {
+    margin-top: 12px;
+  }
+}
+
+.muted {
+  color: $DarkColor;
+  opacity: 0.75;
+  font-size: 0.95rem;
+}
