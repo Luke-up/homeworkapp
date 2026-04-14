@@ -99,7 +99,7 @@
     margin-right: calc(50% - 50vw);
     background: #d9d9d9;
     color: $DarkColor;
-    padding: 22px 0 28px;
+    padding: 22px 20px 28px;
     box-sizing: border-box;
   }
 
@@ -161,7 +161,7 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 620px) {
       grid-template-columns: 1fr;
     }
   }
